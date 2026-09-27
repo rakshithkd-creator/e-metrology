@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const instrumentController_1 = require("../controllers/instrumentController");
+const auth_1 = require("../middleware/auth");
+const rbac_1 = require("../middleware/rbac");
+const router = (0, express_1.Router)();
+router.use(auth_1.authenticate);
+router.get('/', instrumentController_1.listInstruments);
+router.post('/', (0, rbac_1.authorizeRoles)('BUSINESS_USER', 'SUPER_ADMIN'), instrumentController_1.createInstrument);
+router.get('/types', instrumentController_1.listInstrumentTypes);
+router.post('/types', (0, rbac_1.authorizeRoles)('SUPER_ADMIN'), instrumentController_1.createInstrumentType);
+router.get('/:id', instrumentController_1.getInstrument);
+exports.default = router;

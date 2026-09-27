@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const verificationController_1 = require("../controllers/verificationController");
+const auth_1 = require("../middleware/auth");
+const rbac_1 = require("../middleware/rbac");
+const router = (0, express_1.Router)();
+router.use(auth_1.authenticate);
+router.get('/checklists', verificationController_1.getChecklistConfigs);
+router.put('/checklists', (0, rbac_1.authorizeRoles)('SUPER_ADMIN'), verificationController_1.updateChecklistConfigs);
+router.post('/submit', (0, rbac_1.authorizeRoles)('LMO', 'GATC', 'SUPER_ADMIN'), verificationController_1.submitVerification);
+exports.default = router;

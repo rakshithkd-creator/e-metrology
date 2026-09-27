@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const applicationController_1 = require("../controllers/applicationController");
+const auth_1 = require("../middleware/auth");
+const rbac_1 = require("../middleware/rbac");
+const router = (0, express_1.Router)();
+router.use(auth_1.authenticate);
+router.get('/', applicationController_1.listApplications);
+router.post('/', (0, rbac_1.authorizeRoles)('BUSINESS_USER', 'SUPER_ADMIN'), applicationController_1.createApplication);
+router.get('/:id', applicationController_1.getApplication);
+router.post('/:id/review', (0, rbac_1.authorizeRoles)('SUPER_ADMIN'), applicationController_1.reviewApplication);
+router.post('/:id/schedule', (0, rbac_1.authorizeRoles)('SUPER_ADMIN'), applicationController_1.assignAndSchedule);
+exports.default = router;
